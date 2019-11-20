@@ -40,7 +40,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     address _user,
     uint256 _domainId,
     bool _setTo
-  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId)
+  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId) archSubdomain(_permissionDomainId, _domainId)
   {
     ColonyAuthority(address(authority)).setUserRole(_user, _domainId, uint8(ColonyRole.Arbitration), _setTo);
 
@@ -53,12 +53,9 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     address _user,
     uint256 _domainId,
     bool _setTo
-  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId)
+  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId) archSubdomain(_permissionDomainId, _domainId)
   {
-    // Because this permission has some restrictions on domains of action, we transparently implement it as two roles
-    ColonyAuthority colonyAuthority = ColonyAuthority(address(authority));
-    colonyAuthority.setUserRole(_user, _domainId, uint8(ColonyRole.Architecture), _setTo);
-    colonyAuthority.setUserRole(_user, _domainId, uint8(ColonyRole.ArchitectureSubdomain), _setTo);
+    ColonyAuthority(address(authority)).setUserRole(_user, _domainId, uint8(ColonyRole.Architecture), _setTo);
 
     emit ColonyRoleSet(_user, _domainId, uint8(ColonyRole.Architecture), _setTo);
   }
@@ -69,7 +66,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     address _user,
     uint256 _domainId,
     bool _setTo
-  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId)
+  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId) archSubdomain(_permissionDomainId, _domainId)
   {
     ColonyAuthority(address(authority)).setUserRole(_user, _domainId, uint8(ColonyRole.Funding), _setTo);
 
@@ -82,7 +79,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     address _user,
     uint256 _domainId,
     bool _setTo
-  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId)
+  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId) archSubdomain(_permissionDomainId, _domainId)
   {
     ColonyAuthority(address(authority)).setUserRole(_user, _domainId, uint8(ColonyRole.Administration), _setTo);
 
@@ -305,7 +302,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     ColonyAuthority colonyAuthority = ColonyAuthority(address(authority));
 
     colonyAuthority.setRoleCapability(
-     uint8(ColonyDataTypes.ColonyRole.ArchitectureSubdomain),
+     uint8(ColonyDataTypes.ColonyRole.Architecture),
       address(this),
       bytes4(keccak256("setArbitrationRole(uint256,uint256,address,uint256,bool)")),
       true
